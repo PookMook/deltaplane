@@ -1,142 +1,266 @@
-# PM Tools Platform
+# Deltaplane Implementation Plan
 
-A comprehensive platform for product managers to streamline their workflow using voice input and LLMs to maintain documentation and facilitate project scoping.
+## Overview
 
-## Features
-
-- **Multi-tenant Authentication**: Secure GitHub OAuth authentication with organization-based access control
-- **Organization Management**: Create, view, and delete organizations with card-based UI
-- **Product Management**: Create and manage products with detailed specifications
-- **Feature Management**: Track features associated with products
-- **Stakeholder Management**: Track who asked for each features and what where their pain points.
-- **System Architecture**: Document system components and their dependencies
-- **Voice Input**: Use voice commands to update documentation and create work orders
-- **LLM Integration**: Leverage Google Gemini 2.0 and Claude 3.7 for intelligent processing
-- **Work Order Management**: Create and track work orders for implementation
-- **Documentation System**: Automatically generate and maintain documentation
-- **Git Integration**: Sync documentation with Git repositories
-- **Task Management**: Integrate with Linear for task tracking
+This document outlines the implementation plan for the PM Tools platform, a system designed to streamline product management using voice input and LLMs to maintain documentation and facilitate project scoping.
 
 ## Tech Stack
 
-- **Frontend**: React, TypeScript, tailwindCSS and shadcn/ui
-- **Routing**: Nextjs app router
-- **State Management**: Tanstack Query
-- **Database**: SQLite with Drizzle ORM (Turso for production)
-- **Runtime**: Bun
-- **Error Monitoring**: Sentry
-- **Authentication**: GitHub OAuth with custom JWT implementation
-- **Speech Recognition**: Web Speech API
-- **LLM Integration**: Google Gemini 2.0, Claude 3.7
+- Frontend: React, TypeScript, tailwindCSS and shadcn/ui
+- Routing: Nextjs app router
+- Database: SQLite with Drizzle ORM (Turso for production)
+- Runtime: Bun
+- Error Monitoring: Sentry
+- Authentication: GitHub OAuth
+- Speech Recognition: Web Speech API (initially), with potential upgrade to cloud services
+- LLM Integration:
+  - Google Gemini 2.0 for transcription and summarization
+  - Claude 3.7 for technical implementations and complex reasoning
+- Version Control: Git integration for documentation
 
-## Getting Started
+## Current Status
 
-### Prerequisites
+- Project is empty and requires a lot of scafolding
 
-- Bun 1.0.0 or higher
-- GitHub OAuth application credentials
+## Phase 1: Authentication and Core Architecture
 
-### Installation
+### 1.1 Multi-tenant GitHub OAuth Authentication
 
-1. Clone the repository:
+- [ ] Set up custom authentication solution
+- [ ] Implement multi-tenant user model and organization structure
+- [ ] Create authentication middleware
+- [ ] Set up session management with tenant isolation
+- [ ] Implement tenant-specific data access controls
+- [ ] Create organization management UI
+- [ ] Update all routes to use the new authentication system
+- [ ] Implement GitHub OAuth with JWT in HTTP-only cookies
+- [ ] Write tests for multi-tenant authentication
 
-```bash
-git clone https://github.com/yourusername/pmtools.git
-cd pmtools
-```
+### 1.2 Database Setup
 
-2. Install dependencies:
+- [ ] Set up Drizzle ORM
+- [ ] Define database schema for core entities (Products, Features, Systems) with tenant isolation
+- [ ] Create migration scripts
+- [ ] Implement database connection utility
+- [ ] Add tenant context to all database queries
+- [ ] Write tests for database operations
 
-```bash
-bun install
-```
+### 1.3 Styling Setup
 
-3. Create a `.env` file in the root directory with the following variables:
+- [ ] Set up boomerCSS framework
+- [ ] Create base component styles
+- [ ] Implement responsive layouts
+- [ ] Create theming system
+- [ ] Write tests for UI components
 
-```
-# Authentication
-GITHUB_CLIENT_ID=your_github_client_id
-GITHUB_CLIENT_SECRET=your_github_client_secret
-AUTH_SECRET=your_auth_secret
+## Phase 2: Core Entity Management
 
-# Database (Production only)
-DATABASE_URL=your_turso_database_url
-DATABASE_AUTH_TOKEN=your_turso_auth_token
+### 2.1 Product Management
 
-# Sentry
-SENTRY_DSN=your_sentry_dsn
-```
+- [ ] Create product data model with tenant relationships
+- [ ] Implement CRUD API for products
+- [ ] Develop product listing UI
+- [ ] Create product detail page
+- [ ] Implement product search functionality
+- [ ] Write tests for product management
 
-4. Generate database migrations:
+### 2.2 Feature Management
 
-```bash
-bun run db:generate
-```
+- [ ] Create feature data model with relationships to products
+- [ ] Implement CRUD API for features
+- [ ] Develop feature listing UI
+- [ ] Create feature detail page
+- [ ] Implement feature categorization
+- [ ] Write tests for feature management
 
-5. Apply migrations:
+### 2.3 System Architecture Management
 
-```bash
-bun run db:migrate
-```
+- [ ] Create system data model with relationship to features
+- [ ] Implement CRUD API for systems
+- [ ] Develop system listing UI
+- [ ] Create system detail page
+- [ ] Implement system dependency visualization
+- [ ] Write tests for system management
 
-6. Start the development server:
+## Phase 3: Voice Input and LLM Integration
 
-```bash
-bun run dev
-```
+### 3.1 Voice Input System
 
-## Development
+- [ ] Implement voice capture with Web Speech API
+- [ ] Create transcription service
+- [ ] Integrate with Google Gemini 2.0 for transcription processing
+- [ ] Develop voice input UI component
+- [ ] Implement error handling for speech recognition
+- [ ] Write tests for voice input
 
-### Database Management
+### 3.2 LLM Integration
 
-- Generate migrations: `bun run db:generate`
-- Apply migrations: `bun run db:migrate`
-- View database: `bun run db:studio`
+- [ ] Set up Google Gemini 2.0 API integration for summarization tasks
+- [ ] Set up Anthropic Claude 3.7 API integration for technical reasoning tasks
+- [ ] Implement text summarization functionality with Gemini 2.0
+- [ ] Create categorization algorithms using Gemini 2.0
+- [ ] Develop technical analysis and implementation suggestions using Claude 3.7
+- [ ] Implement error handling and fallbacks for both LLM services
+- [ ] Ensure tenant isolation for LLM processing
+- [ ] Ensure that the LLM can create or update any ressource in the database for the current organization (features, product, system)
+- [ ] Write tests for LLM functionality
 
-### Linting
+### 3.3 Text Update & Dictation
 
-- Run linter: `bun run lint`
-- Fix linting issues: `bun run lint:fix`
+- [ ] Create text editing UI with dictation support
+- [ ] Implement Gemini 2.0 for initial text processing and suggestions
+- [ ] Implement Claude 3.7 for technical content refinement
+- [ ] Develop change acceptance/rejection UI
+- [ ] Write tests for text updating system
 
-### Building for Production
+## Phase 4: Work Order and Project Management
 
-```bash
-bun run build:prod
-```
+### 4.1 Work Order Management
 
-## Project Structure
+- [ ] Create work order data model with tenant isolation
+- [ ] Implement CRUD API for work orders
+- [ ] Develop work order creation UI
+- [ ] Create work order listing and detail pages
+- [ ] Implement status tracking for work orders
+- [ ] Write tests for work order management
 
-## Feature Implementation Details
+### 4.2 Active Project Management
 
-### Organization Management
+- [ ] Create active project data model
+- [ ] Implement logic to transform work orders into projects
+- [ ] Develop algorithms to identify impacted systems/features
+- [ ] Create project timeline visualization (Gantt chart)
+- [ ] Implement project status tracking
+- [ ] Ensure cross-tenant isolation
+- [ ] Write tests for project management
 
-The platform includes a complete organization management system:
+### 4.3 Technical Overview Generation
 
-- **Organization Cards**: Organizations are displayed as interactive cards showing name and creation date
-- **Organization Navigation**: Cards are clickable to navigate to detailed organization pages
-- **Organization Deletion**: Admins can delete organizations they manage
-- **Organization Creation**: Users can create new organizations with a simple form
+- [ ] Implement diff generation module
+- [ ] Create LLM-based technical overview generation using Claude 3.7
+- [ ] Develop technical overview UI
+- [ ] Write tests for overview generation
 
-### Authentication and Multi-tenancy
+## Phase 5: Documentation and Integration
 
-The system uses a custom authentication solution:
+### 5.1 Documentation System
 
-- **GitHub OAuth**: Login through GitHub with secure cookie-based sessions
-- **JWT Tokens**: Stateless authentication using JWT in HTTP-only cookies
-- **Multi-tenant Access Control**: Organization-based permissions and data isolation
-- **Role-based Access**: Support for different roles within organizations (admin, member)
+- [ ] Implement markdown file generation
+- [ ] Create change log management
+- [ ] Develop documentation versioning
+- [ ] Create documentation UI
+- [ ] Implement tenant-specific documentation isolation
+- [ ] Write tests for documentation system
 
-## Contributing
+### 5.2 Git Integration
 
+- [ ] Implement Markdown export module
+- [ ] Create Git synchronization service
+- [ ] Develop UI for managing Git integration
+- [ ] Support tenant-specific Git repositories
+- [ ] Write tests for Git integration
 
-## License
+### 5.3 Task Management Integration
 
-This project is not meant to be used by anyone but its creators. Please don't steal my AI coder's work!
+- [ ] Implement Linear API integration
+- [ ] Create automated card creation from technical overviews
+- [ ] Develop UI for managing task integration
+- [ ] Support tenant-specific Linear workspaces
+- [ ] Write tests for task management integration
 
-## Acknowledgments
+## Phase 6: Chatbot and Advanced Features
 
-- [Tanstack Router](https://tanstack.com/router)
-- [Tanstack Query](https://tanstack.com/query)
-- [Drizzle ORM](https://orm.drizzle.team/)
-- [Sentry](https://sentry.io/)
-- [boomerCSS](https://github.com/yourusername/boomercss)
+### 6.1 LLM-Based Chatbot
+
+- [ ] Create knowledge base from product documentation
+- [ ] Implement chatbot interface
+- [ ] Integrate Gemini 2.0 for general questions and summarization
+- [ ] Integrate Claude 3.7 for technical questions and reasoning
+- [ ] Develop context-aware question answering
+- [ ] Implement chat history and persistence
+- [ ] Ensure tenant-specific context isolation
+- [ ] Write tests for chatbot functionality
+
+### 6.2 Timeline & Resource Allocation
+
+- [ ] Create resource allocation module
+- [ ] Implement Gantt chart component
+- [ ] Develop resource assignment UI
+- [ ] Create timeline filtering and search
+- [ ] Support cross-tenant resource allocation for shared projects
+- [ ] Write tests for timeline and resource features
+
+## Phase 7: Testing, Optimization, and Deployment
+
+### 7.1 Comprehensive Testing
+
+- [ ] Perform end-to-end testing
+- [ ] Conduct usability testing
+- [ ] Implement performance testing
+- [ ] Run security audits
+- [ ] Test multi-tenant isolation
+- [ ] Fix identified issues
+
+### 7.2 Optimization
+
+- [ ] Optimize database queries
+- [ ] Implement caching strategies
+- [ ] Optimize LLM API usage
+- [ ] Improve UI performance
+- [ ] Reduce bundle size
+- [ ] Optimize tenant-specific resource usage
+
+### 7.3 Deployment
+
+- [ ] Set up CI/CD pipeline
+- [ ] Configure production environment with Turso
+- [ ] Set up monitoring and logging
+- [ ] Create backup and recovery procedures
+- [ ] Implement tenant-specific resource limits
+- [ ] Deploy to production
+
+## Phase 8: Post-Launch Activities
+
+### 8.1 User Feedback Collection
+
+- [ ] Implement feedback collection mechanism
+- [ ] Create dashboard for feedback analysis
+- [ ] Establish process for prioritizing improvements
+- [ ] Support tenant-specific feedback tracking
+
+### 8.2 Feature Enhancement
+
+- [ ] Plan for implementing real-time collaboration
+- [ ] Develop advanced analytics and reporting
+- [ ] Explore more sophisticated LLM-based features
+- [ ] Implement cross-tenant collaboration capabilities
+
+### 8.3 Maintenance
+
+- [ ] Establish regular update schedule
+- [ ] Create process for security patches
+- [ ] Implement performance monitoring
+- [ ] Set up tenant usage analytics
+
+## Progress Tracking
+
+- Current Phase: Phase 2: Core Entity Management
+- Completed Tasks:
+  - Authentication and Core Architecture (Phase 1) is nearly complete
+  - Multi-tenant GitHub OAuth Authentication is fully implemented
+  - Database setup is complete with proper schemas and indexes
+  - Organization creation and deletion functionality is implemented
+  - Organization UI with card-based display and navigation is complete
+- Pending Tasks:
+  - Writing tests for multi-tenant authentication
+  - Writing tests for database operations
+  - Writing tests for UI components
+  - All Phase 2 implementation tasks (Product, Feature, and System Management)
+- Next Steps:
+  - Start implementing Product Management functionality
+  - Begin creating CRUD API for products
+  - Develop product listing UI
+
+# PM Tools Platform - Development Log
+
+- Repository is setup

@@ -17,7 +17,7 @@ This document outlines the implementation plan for the PM Tools platform, a syst
 - Version Control: Git integration for documentation
 
 ## Current Status
-- Project is empty and requires a lot of scafolding
+- Project is scaffolded and ready to start development
 
 
 ## Phase 1: Authentication and Core Architecture
